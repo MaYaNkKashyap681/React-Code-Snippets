@@ -1,0 +1,139 @@
+//Custom Cursor File
+
+import React, { useRef, useState, useEffect } from 'react';
+
+const CustomCursor = () => {
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const mouseRef = useRef(null);
+
+    useEffect(() => {
+        const handleMove = (e) => {
+            setPosition({ x: e.clientX - 20, y: e.clientY - 20 });
+        };
+
+        window.addEventListener('mousemove', handleMove);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMove);
+        };
+    }, []);
+
+    return (
+        <div
+            className='w-[40px] h-[40px] border-[2px] border-black rounded-full absolute pointer-events-none mouseMovingTransition flex justify-center items-center'
+            id="custom"
+            style={{ left: `${position.x}px`, top: `${position.y}px` }}
+            ref={mouseRef}
+        >
+            <div className='h-[10px] w-[10px] bg-red-500 rounded-full t2'></div>
+        </div>
+    );
+};
+
+export default CustomCursor;
+
+//App File
+const App = () => {
+  const headingRef = useRef(null);
+  useEffect(() => {
+    const x = document.querySelector("#custom");
+    console.log(x);
+    const handleMouseEnter = () => {
+      x.style.scale = 3
+    }
+
+    const handleMouseLeave = () => {
+      x.style.scale = 1;
+    }
+    headingRef.current.addEventListener("mouseenter", handleMouseEnter)
+    headingRef.current.addEventListener("mouseleave", handleMouseLeave)
+
+    return () => {
+      headingRef.current.removeEventListener("mouseenter", handleMouseEnter)
+      headingRef.current.addEventListener("mouseleave", handleMouseLeave)
+
+    }
+  }, [])
+  return (
+    <>
+      <CustomCursor />
+
+      <div className='w-screen h-screen bg-ivory flex justify-center items-center '>
+        <h1 className=' font-third text-[10rem] font-bold mix-blend-multiply' ref={headingRef}>Hello!</h1>
+      </div>
+    </>
+
+  );
+};
+
+export default App;
+
+// In this snippet i am using querySelector to access the customcursor and changing it's styling.
+
+
+
+##Another Way of Doing it Using React states
+
+import React, { useRef, useState, useEffect } from 'react';
+const CustomCursor = ({ isTextHovered }) => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const mouseRef = useRef(null);
+
+  useEffect(() => {
+    const handleMove = (e) => {
+      setPosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+    };
+  }, []);
+
+  return (
+    <div
+      className={`w-[4rem] h-[4rem] bg-black rounded-full absolute pointer-events-none ${
+        isTextHovered ? 'scale-up' : ''
+      }`}
+      style={{ left: `${position.x}px`, top: `${position.y}px` }}
+      ref={mouseRef}
+    />
+  );
+};
+
+export default CustomCursor;
+
+
+import React, { useRef, useState } from 'react';
+import './App.css';
+import CustomCursor from './CustomCursor';
+
+const App = () => {
+  const textRef = useRef(null);
+  const [isTextHovered, setIsTextHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsTextHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsTextHovered(false);
+  };
+
+  return (
+    <div className="App">
+      <h1
+        ref={textRef}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        Hover me to scale up the cursor!
+      </h1>
+      <CustomCursor isTextHovered={isTextHovered} />
+    </div>
+  );
+};
+
+export default App;
+
