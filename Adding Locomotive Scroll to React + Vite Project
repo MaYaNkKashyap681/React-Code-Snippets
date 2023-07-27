@@ -1,0 +1,48 @@
+//App.js File or you can have a seperate script file as well which you can add in the index.html html file
+
+import React, { useEffect, useRef } from 'react';
+import 'locomotive-scroll/src/locomotive-scroll.scss';
+import LocomotiveScroll from 'locomotive-scroll';
+
+const App = () => {
+   const scrollRef = useRef(null);
+   useEffect(() => {
+     let scrollInstance;
+     const initScroll = async () => {
+       scrollInstance = new LocomotiveScroll({
+         el: scrollRef.current,
+         smooth: true, // Enable smooth scrolling
+       });
+     };
+     initScroll();
+     return () => {
+       if (scrollInstance) {
+         scrollInstance.destroy();
+       }
+     };
+   }, []);
+  return (
+    <>
+      <div id="main" ref={scrollRef} className="relative overflow-hidden bg-dark-blue">
+      </div>
+    </>
+
+  );
+};
+
+export default App;
+
+//Configuration   install a sass plugin 
+
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import vitePluginSass from 'vite-plugin-sass'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react(), vitePluginSass()],
+})
+
+
+
+
