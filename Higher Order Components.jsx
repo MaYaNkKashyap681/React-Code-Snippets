@@ -21,3 +21,20 @@ const Hello = ({ col }) => {
 };
 
 const NewComp = WrapperComponent(Hello);
+
+
+// function withColor(Component) {
+//   return function(props) {
+//       return (<>
+//       <div className = "blue" style = {{color: "blue", backgroundColor: "yellow", padding: "6px"}}> 
+//         <Component {...props}/>
+//       </div>
+//       </>)
+//   }
+// }
+
+// function Hello (props) {
+//   return (<h1>Hello, {props.name}</h1>)
+// }
+
+// export default withColor(Hello);
