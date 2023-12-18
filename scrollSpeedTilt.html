@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .tilt-container {
+      width: 100px;
+      height: 100px;
+      background-color: lightblue;
+      margin: 20px;
+      transition: transform 0.3s ease-out;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tilt-container"></div>
+  <div class="tilt-container"></div>
+  <div class="tilt-container"></div>
+
+  <script>
+    let lastScrollTop = 0;
+
+    function startApp() {
+      window.addEventListener("scroll", () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+        // Calculate the scroll speed
+        const scrollSpeed = scrollTop - lastScrollTop;
+        lastScrollTop = scrollTop;
+
+        // Adjust the tilt of the containers based on the scroll speed
+        tiltContainers(scrollSpeed);
+      });
+    }
+
+    function tiltContainers(speed) {
+      const tiltContainers = document.querySelectorAll('.tilt-container');
+      tiltContainers.forEach(container => {
+        // Adjust the rotation based on the scroll speed
+        container.style.transform = `rotate(${speed}deg)`;
+      });
+    }
+
+    startApp();
+  </script>
+
+</body>
+</html>
