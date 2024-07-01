@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Zoom Example</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        let elements = [];
+        let currentZoomLevel = 1;
+
+        canvas.addEventListener('wheel', event => {
+            event.preventDefault();
+
+            const zoomFactor = event.deltaY < 0 ? 1.1 : 0.9;
+            const mouseX = event.clientX - canvas.offsetLeft;
+            const mouseY = event.clientY - canvas.offsetTop;
+
+            elements.forEach(element => {
+                element.width *= zoomFactor;
+                element.height *= zoomFactor;
+                element.x = mouseX + (element.x - mouseX) * zoomFactor;
+                element.y = mouseY + (element.y - mouseY) * zoomFactor;
+            });
+
+            redrawCanvas();
+        });
+
+        function redrawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            elements.forEach(element => {
+                ctx.fillRect(element.x, element.y, element.width, element.height);
+            });
+        }
+
+        // Initialize some elements for demonstration
+        elements.push({ x: 50, y: 50, width: 100, height: 100 });
+        elements.push({ x: 200, y: 150, width: 150, height: 150 });
+
+        redrawCanvas();
+    </script>
+</body>
+</html>
